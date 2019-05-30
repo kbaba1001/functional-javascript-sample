@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/kbaba1001/functional-javascript-sample/issues"
   },
-  "homepage": "https://github.com/kbaba1001/functional-javascript-sample#readme"
+  "homepage": "https://github.com/kbaba1001/functional-javascript-sample#readme",
+  "devDependencies": {
+    "ramda": "^0.26.1"
+  }
 }
