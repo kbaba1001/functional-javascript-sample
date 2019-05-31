@@ -6,7 +6,10 @@
 // EitherやIOモナドは本書のコードから拝借する
 //
 // これになれたら Sanctuary に移る
+//
+// テストはjestを使う
+// https://jestjs.io/en/
 
-const R = require('ramda')
+import main from './src/main';
 
-console.log(R.prop('x', {x: 100}))
+main();
