@@ -1,13 +1,13 @@
-exports.IO = class IO {
+export default class IO {
   constructor(effect) {
-    if(typeof effect !== 'function') {
-      throw 'IO USage: function required'
+    if (typeof effect !== 'function') {
+      throw 'IO Usage: function required'
     }
     this.effect = effect
   }
 
   static of(a) {
-    return new IO(() => a)
+    return new IO( () => a )
   }
 
   static from(fn) {
@@ -15,11 +15,10 @@ exports.IO = class IO {
   }
 
   map(fn) {
-    const self = this
-    return new IO(() => fn(self.effect()))
+    return new IO(() => fn(this.effect()))
   }
 
-  chain(fn) {
+   chain(fn) {
     return fn(this.effect())
   }
 
