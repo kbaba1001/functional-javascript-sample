@@ -4,20 +4,36 @@
 // import * as R from 'ramda'
 
 import S from 'sanctuary'
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 // import $ from 'sanctuary-def'
+
+class Greeting extends Component {
+  render () {
+    return <h1>{this.props.type}</h1>
+  }
+}
 
 export default function main() {
   // S.compose は2つの関数を合成するだけ
-  console.log(S.compose (Math.sqrt) (S.add (1)) (99))
+  // console.log(S.compose (Math.sqrt) (S.add (1)) (99))
 
-  const hoge = S.pipe([
-    S.add (1),
-    Math.sqrt,
-    S.sub (1)]
-  )
-  console.log(hoge(99))
+  // const hoge = S.pipe([
+  //   S.add (1),
+  //   Math.sqrt,
+  //   S.sub (1)]
+  // )
+  // console.log(hoge(99))
 
-  // console.log(S.type (S.Just (42)))
+  // react
+  const elm = document.getElementById("dist")
+  const msg = <div>
+    <Greeting type="Good morning!" />
+    <Greeting type="Hello!" />
+    <Greeting type="Good afternoon!" />
+  </div>
+
+  ReactDOM.render(msg, elm)
 }
 
 // export default function main() {

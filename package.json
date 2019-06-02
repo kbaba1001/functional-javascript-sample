@@ -18,15 +18,11 @@
   },
   "homepage": "https://github.com/kbaba1001/functional-javascript-sample#readme",
   "devDependencies": {
-    "ramda": "^0.26.1",
-    "sanctuary": "^2.0.0"
+    "ramda": "^0.26.1"
   },
   "dependencies": {
-    "either": "0.0.1",
-    "just": "^0.1.8",
-    "left": "^1.0.2",
-    "maybe": "0.0.2",
-    "nothing": "^0.1.0",
-    "right": "0.0.2"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "sanctuary": "^2.0.0"
   }
 }
