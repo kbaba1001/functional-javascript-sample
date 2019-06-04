@@ -5,20 +5,10 @@ import S from 'sanctuary'
 // import $ from 'sanctuary-def'
 
 class Square extends React.Component {
-  // TODO: remove the constructor
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
-
   render() {
-    // TODO: use onClick={this.props.onClick}
-    // TODO: replace this.state.value with this.props.value
     return (
-      <button className="square" onClick={() => this.setState({value: 'X'})}>
-        {this.state.value}
+      <button className="square" onClick={() => this.props.onClick()}>
+        {S.maybeToNullable(this.props.value)}
       </button>
     );
   }
@@ -28,12 +18,26 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(null),
-    };
+      squares: Array(9).fill(S.Nothing)
+    }
+  }
+
+  handleClick(i) {
+    const squares = [...this.state.squares]
+    squares[i] = S.Just('X')
+
+    this.setState({
+      squares: squares
+    })
   }
 
   renderSquare(i) {
-    return <Square value={this.state.squares[i]} />;
+    return (
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    )
   }
 
   render() {
@@ -43,13 +47,19 @@ class Board extends React.Component {
       <div>
         <div className="status">{status}</div>
         <div className="board-row">
-          {this.renderSquare(0)}{this.renderSquare(1)}{this.renderSquare(2)}
+          {this.renderSquare(0)}
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
         </div>
         <div className="board-row">
-          {this.renderSquare(3)}{this.renderSquare(4)}{this.renderSquare(5)}
+          {this.renderSquare(3)}
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
         </div>
         <div className="board-row">
-          {this.renderSquare(6)}{this.renderSquare(7)}{this.renderSquare(8)}
+          {this.renderSquare(6)}
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
         </div>
       </div>
     );
@@ -75,7 +85,7 @@ class Game extends React.Component {
 // ========================================
 
 export default function main() {
-  ReactDOM.render(<Game />, document.getElementById("root"));
+  ReactDOM.render(<Game />, document.querySelector("#root"));
 
 
 
