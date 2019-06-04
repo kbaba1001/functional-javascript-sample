@@ -23,12 +23,19 @@ class Board extends React.Component {
   }
 
   handleClick(i) {
-    const squares = [...this.state.squares]
-    squares[i] = S.Just('X')
+    const setCheck = S.curry2 ((n, squares) => {
+      const clone_squares = [...squares]
+      clone_squares[n] = S.Just('X')
+      return clone_squares
+    }) (i)
+    const squearesObject = (squares) => ({squares: squares})
 
-    this.setState({
-      squares: squares
-    })
+    this.setState(
+      S.pipe([
+        setCheck,
+        squearesObject
+      ]) (this.state.squares)
+    )
   }
 
   renderSquare(i) {
