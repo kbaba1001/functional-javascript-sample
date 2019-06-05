@@ -14,6 +14,34 @@ class Square extends React.Component {
   }
 }
 
+const calculateWinner = (squares) => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ]
+  const find_line = (line) => {
+    const target = S.justs (line.map(x => squares[x]))
+    if (target.length !== 3) { return false }
+
+    return !!(target[0] && target[0] === target[1] && target[0] === target[2])
+  }
+
+  return S.chain (line => squares[line[0]]) (S.find (find_line) (lines))
+}
+
+const getDisplayMark = (xIsNext) => S.Just(xIsNext ? 'X' : 'O')
+const setCheck = (n, mark, squares) => {
+  const new_squares = [...squares]
+  new_squares[n] = mark
+  return new_squares
+}
+
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -24,22 +52,13 @@ class Board extends React.Component {
   }
 
   handleClick(i) {
-    const getDisplayMark = (xIsNext) => S.Just(xIsNext ? 'X' : 'O')
-    const getDisplayMarkFromState = () => getDisplayMark(this.state.xIsNext)
+    if (S.isJust (calculateWinner(this.state.squares) || this.state.squares[i])) { return }
 
-    const setCheck = (n, squares) => {
-      const new_squares = [...squares]
-      new_squares[n] = getDisplayMarkFromState()
-      return new_squares
-    }
-    const squearesObject = (squares) => ({squares: squares})
-
-    // (arr) => this.setState(S.pipe(arr) (this.state)) という関数を作ってもいいかも
     this.setState(
       S.pipe([
         S.prop ('squares'),
-        S.curry2 (setCheck) (i),
-        squearesObject
+        S.curry3 (setCheck) (i) (getDisplayMark(this.state.xIsNext)),
+        squares => ({squares: squares})
       ]) (this.state)
     )
     this.setState(
@@ -60,7 +79,10 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
+    const status = S.pipe([
+      S.maybeToNullable,
+      winner => winner ? ('Winner: ' + winner) : ('Next player: ' + S.maybeToNullable(getDisplayMark(this.state.xIsNext)))
+    ]) (calculateWinner(this.state.squares))
 
     return (
       <div>
