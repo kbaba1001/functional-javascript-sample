@@ -18,23 +18,34 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(S.Nothing)
+      squares: Array(9).fill(S.Nothing),
+      xIsNext: true,
     }
   }
 
   handleClick(i) {
+    const getDisplayMark = (xIsNext) => S.Just(xIsNext ? 'X' : 'O')
+    const getDisplayMarkFromState = () => getDisplayMark(this.state.xIsNext)
+
     const setCheck = (n, squares) => {
       const new_squares = [...squares]
-      new_squares[n] = S.Just('X')
+      new_squares[n] = getDisplayMarkFromState()
       return new_squares
     }
     const squearesObject = (squares) => ({squares: squares})
 
+    // (arr) => this.setState(S.pipe(arr) (this.state)) という関数を作ってもいいかも
     this.setState(
       S.pipe([
         S.prop ('squares'),
         S.curry2 (setCheck) (i),
         squearesObject
+      ]) (this.state)
+    )
+    this.setState(
+      S.pipe([
+        S.prop ('xIsNext'),
+        xIsNext => ({xIsNext: !xIsNext})
       ]) (this.state)
     )
   }
@@ -49,7 +60,7 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = 'Next player: X';
+    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
 
     return (
       <div>
